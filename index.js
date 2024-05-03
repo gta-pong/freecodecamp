@@ -35,18 +35,18 @@ app.get(
     // console.log(req);
     let url = req.url;
     let inputtedUnixDate = url.split("i/")[1];
-    console.log(inputtedUnixDate);
-    console.log(typeof inputtedUnixDate);
+    // console.log(inputtedUnixDate);
+    // console.log(typeof inputtedUnixDate);
     let inputtedUnixDateInt = parseInt(inputtedUnixDate);
-    console.log(typeof inputtedUnixDateInt);
+    // console.log(typeof inputtedUnixDateInt);
     let jsDate = new Date(inputtedUnixDateInt);
-    console.log(jsDate);
+    // console.log(jsDate);
     let utcDate = jsDate.toUTCString();
-    console.log(utcDate);
+    // console.log(utcDate);
     let responseObj = {};
     responseObj.unix = inputtedUnixDateInt;
     responseObj.utc = utcDate;
-    console.log(responseObj);
+    // console.log(responseObj);
     let sendResponse = responseObj;
     res.send(sendResponse);
   }
@@ -65,7 +65,14 @@ app.get(
     let inputtedDate = params.date;
     // console.log(inputtedDate);
     let parsedDate = new Date(inputtedDate);
+    // console.log("parsed date: " + parsedDate);
+    // console.log(typeof parsedDate);
     // console.log(parsedDate);
+
+   
+
+    // let checkParsedDate = check(parsedDate);
+    // console.log(checkParsedDate);
     let utcDate = parsedDate.toUTCString();
     // console.log(utcDate);
     let unixDate = parsedDate.getTime();
@@ -74,14 +81,44 @@ app.get(
     responseObj.unix = unixDate;
     responseObj.utc = utcDate;
     // console.log(responseObj);
-    console.log(responseObj);
+    // console.log(responseObj);
     let sendResponse = responseObj;
-    res.send(sendResponse);
+    function currTime() {
+      // console.log('currTime fired');
+      let jsTimeObj = new Date();
+      jsTimeObj.unix = jsTimeObj.getTime()
+      jsTimeObj.utc = jsTimeObj.toUTCString()
+      // console.log(jsTimeObj.unix);
+      let sendCurrTime = {};
+      sendCurrTime.unix = jsTimeObj.unix;
+      sendCurrTime.utc = jsTimeObj.utc;
+      // console.log(sendCurrTime);
+      return sendCurrTime;
+
+    };
+    
+
+//LEFT:
+//fix issue where dates going to /api/ should be redirected to /:date?<date>
+//then the empty date param check should work
+//first look at the test console output from fcc.
+     //DATE VALIDATION
+     function isDateValid(date) {
+        // console.log(req._parsedOriginalUrl);
+      if (req.url === '/api/') {
+        return res.send(currTime());
+      } else 
+      if (date == "Invalid Date") {
+        return res.send({"error": "Invalid Date"});
+      } else {
+        return res.send(sendResponse);
+      }
+    }
+    isDateValid(parsedDate);
+
+    // res.send(sendResponse);
   }
 );
-
-
-
 
 // Listen on port set in environment variable or default to 3000
 var listener = app.listen(process.env.PORT || 3000, function () {
