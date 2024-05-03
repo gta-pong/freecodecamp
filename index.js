@@ -24,6 +24,35 @@ app.get("/api/hello", function (req, res) {
   res.json({greeting: 'hello API'});
 });
 
+//A request to /api/:date? with a valid date should return a JSON object with a unix key that is a Unix timestamp of the input date in milliseconds (as type Number)
+app.get("/api/:date?",
+
+function (req, res, next) {
+  console.log('/api/date? fired');
+  next();
+},
+function (req, res, next) {
+  let params = req.params;
+  let inputtedDate = params.date;
+  // console.log(inputtedDate);
+  let parsedDate = new Date(inputtedDate);
+  // console.log(parsedDate);
+  let utcDate = parsedDate.toUTCString();
+  // console.log(utcDate);
+  let unixDate = parsedDate.getTime();
+  // console.log(unixDate);
+  let responseObj = {};
+  responseObj.unix = unixDate;
+  responseObj.utc = utcDate;
+  // console.log(responseObj);
+  console.log(responseObj);
+  let sendResponse = responseObj;
+  res.send(sendResponse);
+}
+
+);
+
+
 
 
 // Listen on port set in environment variable or default to 3000
