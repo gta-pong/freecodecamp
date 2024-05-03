@@ -68,9 +68,6 @@ app.get(
     // console.log("parsed date: " + parsedDate);
     // console.log(typeof parsedDate);
     // console.log(parsedDate);
-
-   
-
     // let checkParsedDate = check(parsedDate);
     // console.log(checkParsedDate);
     let utcDate = parsedDate.toUTCString();
@@ -86,30 +83,28 @@ app.get(
     function currTime() {
       // console.log('currTime fired');
       let jsTimeObj = new Date();
-      jsTimeObj.unix = jsTimeObj.getTime()
-      jsTimeObj.utc = jsTimeObj.toUTCString()
+      jsTimeObj.unix = jsTimeObj.getTime();
+      jsTimeObj.utc = jsTimeObj.toUTCString();
       // console.log(jsTimeObj.unix);
       let sendCurrTime = {};
       sendCurrTime.unix = jsTimeObj.unix;
       sendCurrTime.utc = jsTimeObj.utc;
       // console.log(sendCurrTime);
       return sendCurrTime;
+    }
 
-    };
-    
-
-//LEFT:
-//fix issue where dates going to /api/ should be redirected to /:date?<date>
-//then the empty date param check should work
-//first look at the test console output from fcc.
-     //DATE VALIDATION
-     function isDateValid(date) {
-        // console.log(req._parsedOriginalUrl);
-      if (req.url === '/api/') {
+    //LEFT:
+    //fix issue where dates going to /api/ should be redirected to /:date?<date>
+    //then the empty date param check should work
+    //first look at the test console output from fcc.
+    //DATE VALIDATION
+    function isDateValid(date) {
+      // console.log(req._parsedOriginalUrl);
+      if (req.url === "/api" || req.url === "/api/") {
+        console.log(typeof currTime().unix)
         return res.send(currTime());
-      } else 
-      if (date == "Invalid Date") {
-        return res.send({"error": "Invalid Date"});
+      } else if (date == "Invalid Date") {
+        return res.send({ error: "Invalid Date" });
       } else {
         return res.send(sendResponse);
       }
